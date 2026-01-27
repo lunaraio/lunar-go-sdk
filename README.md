@@ -4,7 +4,7 @@ Official Go SDK for the Lunar Tools API.
 
 ## Installation
 
-```
+```bash
 go get github.com/lunartools/lunar-go-sdk
 ```
 
@@ -20,7 +20,7 @@ Each API call requires a user's access token. Users can find their access token 
 
 ### Initialize the Client
 
-```
+```go
 package main
 
 import (
@@ -36,7 +36,7 @@ func main() {
 
 ### Add Product to Inventory
 
-```
+```go
 err := client.AddProduct(lunartools.AddProduct{
     Token: "user-access-token",
     Name:  "Charizard VMAX",
@@ -54,7 +54,7 @@ if err != nil {
 
 ### Add Order
 
-```
+```go
 err := client.AddOrder(lunartools.AddOrder{
     Token:       "user-access-token",
     Name:        "Pokemon Booster Box",
@@ -73,7 +73,7 @@ if err != nil {
 
 ### Add Profile Analytics
 
-```
+```go
 err := client.AddProfile(lunartools.AddProfile{
     Token:   "user-access-token",
     Success: true,
@@ -113,7 +113,7 @@ if err != nil {
 
 ### Forward Webhook to Discord
 
-```
+```go
 response, err := client.Webhook(
     "https://www.lunartools.co/api/webhooks/YOUR_TOKEN_HERE",
     lunartools.Webhook{
@@ -153,7 +153,7 @@ fmt.Printf("Status: %s, Queue Length: %d\n", response.Status, response.QueueLeng
 
 #### Config
 
-```
+```go
 type Config struct {
     APIKey  string
     BaseURL string // Optional, defaults to https://www.lunartools.co
@@ -162,7 +162,7 @@ type Config struct {
 
 #### AddProduct
 
-```
+```go
 type AddProduct struct {
     Token string   // Required: User's access token
     Name  string   // Required: Product name
@@ -177,7 +177,7 @@ type AddProduct struct {
 
 #### AddOrder
 
-```
+```go
 type AddOrder struct {
     Token       string  // Required: User's access token
     Name        string  // Required: Order name
@@ -197,7 +197,7 @@ type AddOrder struct {
 
 #### AddProfile
 
-```
+```go
 type AddProfile struct {
     Token    string  // Required: User's access token
     Success  bool    // Required: Whether the checkout was successful
@@ -229,7 +229,7 @@ type Payment struct {
 
 #### Webhook
 
-```
+```go
 type Webhook struct {
     Username  *string // Optional: Override webhook username
     AvatarURL *string // Optional: Override webhook avatar
@@ -257,13 +257,13 @@ type Embed struct {
 
 Add a new product to a user's inventory.
 
-```
+```go
 func (c *Client) AddProduct(product AddProduct) error
 ```
 
 **Example:**
 
-```
+```go
 err := client.AddProduct(lunartools.AddProduct{
     Token: "user-access-token",
     Name:  "Product Name",
@@ -280,13 +280,13 @@ if err != nil {
 
 Add a new order to a user's orders.
 
-```
+```go
 func (c *Client) AddOrder(order AddOrder) error
 ```
 
 **Example:**
 
-```
+```go
 err := client.AddOrder(lunartools.AddOrder{
     Token:       "user-access-token",
     Name:        "Pokemon Cards",
@@ -304,13 +304,13 @@ if err != nil {
 
 Add profile analytics data for tracking successful/declined checkouts.
 
-```
+```go
 func (c *Client) AddProfile(profile AddProfile) error
 ```
 
 **Example:**
 
-```
+```go
 err := client.AddProfile(lunartools.AddProfile{
     Token:   "user-access-token",
     Success: true,
@@ -349,13 +349,13 @@ if err != nil {
 
 Forward a webhook payload to Discord via Lunar Tools.
 
-```
+```go
 func (c *Client) Webhook(webhookURL string, payload Webhook) (*WebhookResponse, error)
 ```
 
 **Example:**
 
-```
+```go
 response, err := client.Webhook(
     "https://www.lunartools.co/api/webhooks/TOKEN",
     lunartools.Webhook{
@@ -387,7 +387,7 @@ fmt.Printf("Status: %s\n", response.Status)
 
 The SDK provides helper functions for creating pointers to primitive types:
 
-```
+```go
 lunartools.String("value")   // *string
 lunartools.Int(123)          // *int
 lunartools.Float64(99.99)    // *float64
@@ -410,7 +410,7 @@ The SDK uses two-level authentication:
 
 All methods return errors that should be handled appropriately:
 
-```
+```go
 err := client.AddProduct(lunartools.AddProduct{
     Token: "user-access-token",
     Name:  "",
@@ -424,7 +424,7 @@ if err != nil {
 
 ## Complete Example
 
-```
+```go
 package main
 
 import (
