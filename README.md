@@ -5,7 +5,7 @@ Official Go SDK for the Lunar Tools API.
 ## Installation
 
 ```bash
-go get github.com/lunartools/lunar-go-sdk
+go get github.com/senpai0807/lunar-go-sdk
 ```
 
 ## Getting Started
@@ -24,7 +24,7 @@ Each API call requires a user's access token. Users can find their access token 
 package main
 
 import (
-    lunartools "github.com/lunartools/lunar-go-sdk"
+    lunartools "github.com/senpai0807/lunar-go-sdk"
 )
 
 func main() {
