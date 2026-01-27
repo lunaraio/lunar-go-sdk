@@ -8,7 +8,7 @@ import (
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/senpai0807/lunar-go-sdk/src/types"
+	"github.com/lunaraio/lunar-go-sdk/src/types"
 )
 
 var json = jsoniter.ConfigFastest

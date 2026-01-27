@@ -1,4 +1,4 @@
-module github.com/senpai0807/lunar-go-sdk
+module github.com/lunaraio/lunar-go-sdk
 
 go 1.25.3
 
