@@ -432,7 +432,7 @@ import (
     "log"
     "time"
 
-    lunartools "github.com/lunartools/lunar-go-sdk"
+    lunartools "github.com/senpai0807/lunar-go-sdk"
 )
 
 func main() {
