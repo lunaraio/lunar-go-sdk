@@ -111,6 +111,53 @@ if err != nil {
 }
 ```
 
+### Add Task Analytics
+
+```go
+err := client.AddTask(lunartools.AddTask{
+    Token: "user-access-token",
+    Bot:   "LunarAIO",
+    Site:  "Nike",
+    Mode:  "Fast",
+    Input: "DM0121-001",
+    Profile: lunartools.TaskProfile{
+        Billing: lunartools.Address{
+            Name:     "John Doe",
+            Phone:    "5551234567",
+            Line1:    "123 Main St",
+            Line2:    lunartools.String("Apt 4B"),
+            PostCode: "10001",
+            City:     "New York",
+            State:    "NY",
+            Country:  "United States",
+        },
+        Shipping: lunartools.Address{
+            Name:     "John Doe",
+            Phone:    "5551234567",
+            Line1:    "123 Main St",
+            Line2:    lunartools.String("Apt 4B"),
+            PostCode: "10001",
+            City:     "New York",
+            State:    "NY",
+            Country:  "United States",
+        },
+        Payment: lunartools.Payment{
+            Name:     "John Doe",
+            Type:     "Visa",
+            LastFour: "4242",
+            ExpMonth: "12",
+            ExpYear:  "2025",
+        },
+    },
+    Proxy:   "http://username:password@proxy.example.com:8080",
+    Account: "john.doe@example.com",
+    Success: true,
+})
+if err != nil {
+    log.Fatal(err)
+}
+```
+
 ### Forward Webhook to Discord
 
 ```go
@@ -224,6 +271,28 @@ type Payment struct {
     ExpMonth string  // Required: Expiration month (MM)
     ExpYear  string  // Required: Expiration year (YYYY)
     CVV      *string // Optional: CVV code
+}
+```
+
+#### AddTask
+
+```go
+type AddTask struct {
+    Token   string      // Required: User's access token
+    Bot     string      // Required: Bot name (e.g., "LunarAIO", "Stellar", "Valor")
+    Site    string      // Required: Site/retailer name (e.g., "Nike", "Walmart", "Target")
+    Mode    string      // Required: Checkout mode (e.g., "Fast", "Safe", "Guest")
+    Input   string      // Required: Product input (SKU, URL, keywords, etc.)
+    Profile TaskProfile // Required: Profile information used for checkout
+    Proxy   string      // Required: Proxy used for the task
+    Account string      // Required: Account email/username (empty string if guest checkout)
+    Success bool        // Required: Whether the checkout was successful
+}
+
+type TaskProfile struct {
+    Billing  Address // Required: Billing address
+    Shipping Address // Required: Shipping address
+    Payment  Payment // Required: Payment method
 }
 ```
 
@@ -345,6 +414,69 @@ if err != nil {
 }
 ```
 
+#### AddTask
+
+Add task analytics data for tracking checkout attempts and generating AI-powered setup suggestions.
+
+```go
+func (c *Client) AddTask(task AddTask) error
+```
+
+**Example:**
+
+```go
+err := client.AddTask(lunartools.AddTask{
+    Token: "user-access-token",
+    Bot:   "LunarAIO",
+    Site:  "Nike",
+    Mode:  "Fast",
+    Input: "DM0121-001",
+    Profile: lunartools.TaskProfile{
+        Billing: lunartools.Address{
+            Name:     "John Doe",
+            Phone:    "5551234567",
+            Line1:    "123 Main St",
+            PostCode: "10001",
+            City:     "New York",
+            State:    "NY",
+            Country:  "United States",
+        },
+        Shipping: lunartools.Address{
+            Name:     "John Doe",
+            Phone:    "5551234567",
+            Line1:    "456 Oak Ave",
+            PostCode: "10002",
+            City:     "Brooklyn",
+            State:    "NY",
+            Country:  "United States",
+        },
+        Payment: lunartools.Payment{
+            Name:     "John Doe",
+            Type:     "Visa",
+            LastFour: "4242",
+            ExpMonth: "12",
+            ExpYear:  "2025",
+        },
+    },
+    Proxy:   "http://user:pass@proxy.example.com:8080",
+    Account: "john.doe@gmail.com",
+    Success: true,
+})
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+**Use Case:**
+
+The `AddTask` method powers Lunar Tools' AI-driven setup suggestion system. By reporting checkout attempts, the platform:
+- Analyzes success/failure patterns across addresses, payment methods, proxies, and accounts
+- Identifies burned profiles with high failure rates
+- Recommends optimal configurations based on historical performance
+- Provides actionable insights to improve checkout success rates
+
+Users can view personalized setup suggestions in the Lunar Tools app under Profiles > Setups.
+
 #### Webhook
 
 Forward a webhook payload to Discord via Lunar Tools.
@@ -367,8 +499,8 @@ response, err := client.Webhook(
                 Color:       lunartools.Int(0xFF0000),
                 Fields: []lunartools.Field{
                     {
-                        Name:  "Field 1",
-                        Value: "Value 1",
+                        Name:   "Field 1",
+                        Value:  "Value 1",
                         Inline: lunartools.Bool(true),
                     },
                 },
@@ -443,8 +575,51 @@ func main() {
 
     userToken := "user-access-token"
 
+    // Add task analytics
+    err := client.AddTask(lunartools.AddTask{
+        Token: userToken,
+        Bot:   "MyBot",
+        Site:  "Nike",
+        Mode:  "Fast",
+        Input: "DM0121-001",
+        Profile: lunartools.TaskProfile{
+            Billing: lunartools.Address{
+                Name:     "John Doe",
+                Phone:    "5551234567",
+                Line1:    "123 Main St",
+                PostCode: "10001",
+                City:     "New York",
+                State:    "NY",
+                Country:  "United States",
+            },
+            Shipping: lunartools.Address{
+                Name:     "John Doe",
+                Phone:    "5551234567",
+                Line1:    "456 Oak Ave",
+                PostCode: "10002",
+                City:     "Brooklyn",
+                State:    "NY",
+                Country:  "United States",
+            },
+            Payment: lunartools.Payment{
+                Name:     "John Doe",
+                Type:     "Visa",
+                LastFour: "4242",
+                ExpMonth: "12",
+                ExpYear:  "2025",
+            },
+        },
+        Proxy:   "http://user:pass@proxy.example.com:8080",
+        Account: "john.doe@gmail.com",
+        Success: true,
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("✅ Task analytics added")
+
     // Add product
-    err := client.AddProduct(lunartools.AddProduct{
+    err = client.AddProduct(lunartools.AddProduct{
         Token: userToken,
         Name:  "Limited Edition Sneakers",
         SKU:   "SNKR-001",
@@ -474,7 +649,7 @@ func main() {
     }
     fmt.Println("✅ Order added")
 
-    // Track profile analytics
+    // Track legacy profile analytics
     err = client.AddProfile(lunartools.AddProfile{
         Token:   userToken,
         Success: true,

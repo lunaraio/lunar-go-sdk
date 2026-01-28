@@ -109,3 +109,21 @@ type AddProfile struct {
 	Shipping Address `json:"shipping"`
 	Payment  Payment `json:"payment"`
 }
+
+type TaskProfile struct {
+	Billing  Address `json:"billing"`
+	Shipping Address `json:"shipping"`
+	Payment  Payment `json:"payment"`
+}
+
+type AddTask struct {
+	Token   string      `json:"token"`
+	Bot     string      `json:"bot"`
+	Site    string      `json:"site"`
+	Mode    string      `json:"mode"`
+	Input   string      `json:"input"`
+	Profile TaskProfile `json:"profile"`
+	Proxy   string      `json:"proxy"`
+	Account string      `json:"account"`
+	Success bool        `json:"success"`
+}

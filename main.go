@@ -18,8 +18,10 @@ type WebhookResponse = types.WebhookResponse
 type AddProduct = types.AddProduct
 type AddOrder = types.AddOrder
 type AddProfile = types.AddProfile
+type AddTask = types.AddTask
 type Address = types.Address
 type Payment = types.Payment
+type TaskProfile = types.TaskProfile
 
 var NewClient = client.NewClient
 

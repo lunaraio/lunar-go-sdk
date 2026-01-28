@@ -92,6 +92,40 @@ func (c *Client) AddProfile(profile types.AddProfile) error {
 	return c.makeRequest("POST", "/api/sdk/add-profile", profile, nil)
 }
 
+func (c *Client) AddTask(task types.AddTask) error {
+	if strings.TrimSpace(task.Token) == "" {
+		return fmt.Errorf("user access token is required")
+	}
+	if strings.TrimSpace(task.Bot) == "" {
+		return fmt.Errorf("bot name is required")
+	}
+	if strings.TrimSpace(task.Site) == "" {
+		return fmt.Errorf("site is required")
+	}
+	if strings.TrimSpace(task.Mode) == "" {
+		return fmt.Errorf("mode is required")
+	}
+	if strings.TrimSpace(task.Input) == "" {
+		return fmt.Errorf("input is required")
+	}
+
+	if err := c.validateAddress(task.Profile.Billing, "billing"); err != nil {
+		return err
+	}
+	if err := c.validateAddress(task.Profile.Shipping, "shipping"); err != nil {
+		return err
+	}
+	if err := c.validatePayment(task.Profile.Payment); err != nil {
+		return err
+	}
+
+	if strings.TrimSpace(task.Proxy) == "" {
+		return fmt.Errorf("proxy is required")
+	}
+
+	return c.makeRequest("POST", "/api/sdk/add-task", task, nil)
+}
+
 func (c *Client) validateAddress(address types.Address, addressType string) error {
 	if strings.TrimSpace(address.Name) == "" {
 		return fmt.Errorf("%s name is required", addressType)
